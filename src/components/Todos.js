@@ -1,34 +1,36 @@
 import Todo from './Todo'
 import { data } from '../data'
 import { useState } from 'react'
-import Header from './layout/Header'
+import axios from 'axios'
+
 import AddTodo from './AddTodo'
-import { v4 as uuidv4 } from 'uuid'
 
 function Todos() {
   const [todos, setTodos] = useState(data)
+
+  // DELETE TODO
   const delTodo = (id) => {
-    let newTodos = todos.filter((todo) => todo.id !== id)
-    setTodos(newTodos)
+    axios
+      .delete(`https://jsonplaceholder.typicode.com/todos/${id}`)
+      .then((res) => setTodos(todos.filter((todo) => todo.id !== id)))
   }
+
+  // ADD TODO
   const addTodo = (title) => {
-    const newTodo = {
-      id: uuidv4(),
-      title,
-      completed: false,
-    }
-    let newTodos = todos.concat(newTodo)
-    setTodos(newTodos)
+    axios
+      .post('https://jsonplaceholder.typicode.com/todos', {
+        title,
+        completed: false,
+      })
+      .then((res) => setTodos(todos.concat(res.data)))
   }
+
   return (
     <>
-      <div className='container'>
-        <Header />
-        <AddTodo addTodo={addTodo} />
-        {todos.map((todo) => {
-          return <Todo key={todo.id} {...todo} delTodo={delTodo} />
-        })}
-      </div>
+      <AddTodo addTodo={addTodo} />
+      {todos.map((todo) => {
+        return <Todo key={todo.id} {...todo} delTodo={delTodo} />
+      })}
     </>
   )
 }

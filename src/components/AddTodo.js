@@ -14,7 +14,9 @@ function AddTodo({ addTodo }) {
 
   const submit = (e) => {
     e.preventDefault()
-    addTodo(todo)
+    if (todo !== '') {
+      addTodo(todo)
+    }
   }
 
   return (

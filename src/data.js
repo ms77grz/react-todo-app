@@ -1,17 +1,11 @@
-export const data = [
-  {
-    id: 1,
-    title: 'Take out the trash',
-    completed: false,
-  },
-  {
-    id: 2,
-    title: 'Dinner with wife',
-    completed: false,
-  },
-  {
-    id: 3,
-    title: 'Meeting with boss',
-    completed: false,
-  },
-]
+import axios from 'axios'
+
+export const data = getData()
+
+function getData() {
+  const data = []
+  axios
+    .get('https://jsonplaceholder.typicode.com/todos?_limit=10')
+    .then((res) => data.unshift(...res.data))
+  return data
+}
